@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #eef2f5;
+    }
+    input, select {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .reg {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .reg div.section {
+      margin-bottom: 15px;
+    }
+    .reg h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .register-btn {
+      background-color: cornflowerblue;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .register-btn:hover {
+      background-color: royalblue;
+    }
+  </style>
+</head>
+<body>
+  <section class="reg">
+    <h1>Registration</h1>
+    <form action="/register" method="POST" onsubmit="return validateForm(event)">
+      <!-- User Type -->
+      <div class="section">
+        <label for="usertype">User Type</label>
+        <select name="usertype" id="usertype" onchange="handleUserTypeChange()" required>
+          <option value="">Select</option>
+          <option value="hospital">Hospital Staff</option>
+          <option value="doctor">Doctor</option>
+          <option value="laboratory">Laboratory</option>
+          <option value="patient">Patient</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <!-- Common Fields -->
+      <div class="section">
+        <label for="name">Name</label>
+        <input name="name" id="name" type="text" required />
+      </div>
+
+      <div class="section">
+        <label for="email">E-Mail</label>
+        <input name="email" id="email" type="email" required />
+      </div>
+
+      <div class="section">
+        <label>Contact Number</label>
+        <div style="display: flex; align-items: center; border:1px solid #ccc; border-radius:4px; overflow:hidden;">
+          <select name="country_code" required style="width:80px; border:none; background:#f0f0f0;">
+            <option value="+91" selected>🇮🇳 +91</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+81">🇯🇵 +81</option>
+            <option value="+61">🇦🇺 +61</option>
+            <option value="+86">🇨🇳 +86</option>
+            <option value="+49">🇩🇪 +49</option>
+          </select>
+          <input name="phone" type="tel" placeholder="Enter phone number" style="border:none; flex:1;" required />
+        </div>
+      </div>
+
+      <!-- Hospital Section -->
+      <div id="hospital_dept" class="section" style="display:none">
+        <label>Gender</label>
+        <select name="hospital_gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <label>Designation</label>
+        <input name="designation" type="text" />
+        <label>Password</label>
+        <input name="hospass" type="password" minlength="6" maxlength="20" />
+        <label>Confirm Password</label>
+        <input name="conhospass" type="password" minlength="6" maxlength="20" />
+      </div>
+
+      <!-- Doctor Section -->
+      <div id="doctor_dept" class="section" style="display:none">
+        <label>Gender</label>
+        <select name="doctor_gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <label>Experience</label>
+        <input name="experience" type="text" />
+        <label>Specialisation</label>
+        <input name="specialisation" type="text" />
+        <label>Password</label>
+        <input name="docpass" type="password" minlength="6" maxlength="20" />
+        <label>Confirm Password</label>
+        <input name="condocpass" type="password" minlength="6" maxlength="20" />
+      </div>
+
+      <!-- Laboratory Section -->
+      <div id="lab_dept" class="section" style="display:none">
+        <label>Gender</label>
+        <select name="laboratory_gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <label>Lab Address</label>
+        <input name="address" type="text" />
+        <label>Password</label>
+        <input name="labpass" type="password" minlength="6" maxlength="20" />
+        <label>Confirm Password</label>
+        <input name="conlabpass" type="password" minlength="6" maxlength="20" />
+      </div>
+
+      <!-- Admin Section -->
+      <div id="admin_dept" class="section" style="display:none">
+        <label>Gender</label>
+        <select name="admin_gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <label>Password</label>
+        <input name="adipass" type="password" minlength="6" maxlength="20" />
+        <label>Confirm Password</label>
+        <input name="conadipass" type="password" minlength="6" maxlength="20" />
+      </div>
+
+      <!-- reCAPTCHA -->
+      <div class="section">
+        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+      </div>
+
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+  </section>
+
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script>
+    function hideAll() {
+      ['hospital_dept','doctor_dept','lab_dept','admin_dept']
+        .forEach(id => {
+          const sec = document.getElementById(id);
+          sec.style.display = 'none';
+          sec.querySelectorAll('input, select').forEach(el => el.required = false);
+        });
+    }
+
+    function handleUserTypeChange() {
+      const role = document.getElementById('usertype').value;
+      if (role === 'patient') {
+        return (window.location = '/voice_register');
+      }
+      hideAll();
+      const map = {
+        hospital: 'hospital_dept',
+        doctor: 'doctor_dept',
+        laboratory: 'lab_dept',
+        admin: 'admin_dept'
+      };
+      const sec = map[role];
+      if (!sec) return;
+      const container = document.getElementById(sec);
+      container.style.display = 'block';
+      container.querySelectorAll('input, select').forEach(el => el.required = true);
+    }
+
+    function validateForm(e) {
+      const role = document.getElementById('usertype').value;
+      const fields = {
+        hospital: ['hospass','conhospass'],
+        doctor: ['docpass','condocpass'],
+        laboratory: ['labpass','conlabpass'],
+        admin: ['adipass','conadipass']
+      }[role];
+
+      if (fields) {
+        const p = document.getElementsByName(fields[0])[0].value;
+        const c = document.getElementsByName(fields[1])[0].value;
+        if (p !== c) {
+          alert('❗ Passwords do not match.');
+          return e.preventDefault();
+        }
+        if (p.length < 6 || p.length > 20) {
+          alert('❗ Password must be 6–20 characters long.');
+          return e.preventDefault();
+        }
+      }
+
+      if (grecaptcha.getResponse().length === 0) {
+        alert('❗ Please confirm you are not a robot.');
+        grecaptcha.reset();
+        return e.preventDefault();
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2, h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      color: #34495e;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 5px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .message-box {
+      background-color: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-left: 5px solid #007bff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .message-box strong {
+      color: #333;
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    .message-box small {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .no-messages {
+      color: #888;
+      font-style: italic;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Welcome, Dr. {{ doctor.full_name }}</div>
+
+    <h3 class="section-title">Messages from Patients:</h3>
+    {% for msg in messages %}
+      <div class="message-box">
+        <p><strong>Patient Name:</strong> {{ msg.patient.full_name }}</p>
+        <p><strong>Patient ID:</strong> {{ msg.patient.custom_id }}</p>
+        <p><strong>Age:</strong> {{ msg.patient.age }}</p>
+        <p><strong>Phone:</strong> {{ msg.patient.contact_number }}</p>
+        <p><strong>Message:</strong> {{ msg.encrypted_message | decrypt }}</p>
+        <p><small>Sent on: {{ msg.timestamp }}</small></p>
+        <form action="{{ url_for('reply_message') }}" method="POST">
+  <input type="hidden" name="patient_id" value="{{ msg.patient_id }}">
+  <textarea name="reply_text" placeholder="Write reply..." required></textarea>
+  <button type="submit">Send Reply & Clear Messages</button>
+</form>
+
+      </div>
+    {% else %}
+      <p class="no-messages">No messages received from patients yet.</p>
+    {% endfor %}
+    <br>
+    <h3 class="section-title">Images Received from Patients</h3>
+{% if patient_images %}
+  {% for img in patient_images %}
+    <div class="message-box">
+      <p><strong>From Patient ID:</strong> {{ img.patient_id }}</p>
+      <img src="{{ url_for('static', filename='uploads/' + img.image_path.split('/')[-1]) }}" style="max-width:300px;"><br>
+      <small>Received on: {{ img.timestamp }}</small>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="no-messages">No images received from patients.</p>
+{% endif %}
+<br>
+<br>
+    <h3 class="section-title">Messages from Labs:</h3>
+    {% for msg in lab_messages %}
+      <div class="message-box">
+        <p><strong>From:</strong> {{ msg.lab.name }}</p>
+        <p><strong>Message:</strong> {{ msg.decrypted_message }}</p>
+        <p><small>Sent on: {{ msg.timestamp }}</small></p>
+<form action="{{ url_for('send_lab_reply') }}" method="POST">
+  <input type="hidden" name="lab_id" value="{{ msg.lab_id }}">
+  <textarea name="reply_text" required placeholder="Reply to Lab..."></textarea>
+  <button type="submit">Send Reply</button>
+</form>
+        
+<br><br>
+
+
+      </div>
+    {% else %}
+      <p class="no-messages">No messages received from labs yet.</p>
+    {% endfor %}
+     <!-- Lab Images -->
+    <h3 class="section-title">Images Received from Labs</h3>
+    {% if lab_images %}
+      {% for img in lab_images %}
+        <div class="message-box">
+          <p><strong>From Lab ID:</strong> {{ img.lab_id }}</p>
+          <img src="{{ url_for('static', filename='uploads/' + img.image_path.split('/')[-1]) }}" style="max-width:300px;"><br>
+          <small>Received on: {{ img.timestamp }}</small>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-messages">No images received from labs.</p>
+    {% endif %}
+
+  </div>
+</body>
+</html>

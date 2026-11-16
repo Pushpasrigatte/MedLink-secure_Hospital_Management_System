@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - All Registered Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f2f2f2;
+        }
+        h2 {
+            margin-top: 40px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <h2>Patients</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th></tr>
+        {% for p in patients %}
+        <tr>
+            <td>{{ p.custom_id }}</td>
+            <td>{{ p.full_name }}</td>
+            <td>{{ p.contact_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Doctors</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th></tr>
+        {% for d in doctors %}
+        <tr>
+            <td>{{ d.custom_id }}</td>
+            <td>{{ d.full_name }}</td>
+            <td>{{ d.phone }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Labs</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th></tr>
+        {% for l in labs %}
+        <tr>
+            <td>{{ l.custom_id }}</td>
+            <td>{{ l.name }}</td>
+            <td>{{ l.contact_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Hospitals</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th></tr>
+        {% for h in hospitals %}
+        <tr>
+            <td>{{ h.custom_id }}</td>
+            <td>{{ h.name }}</td>
+            <td>{{ h.contact_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Admins</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th></tr>
+        {% for a in admins %}
+        <tr>
+            <td>{{ a.custom_id }}</td>
+            <td>{{ a.full_name }}</td>
+            <td>{{ a.contact_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

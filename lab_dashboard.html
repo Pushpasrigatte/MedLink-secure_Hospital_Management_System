@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send Message to Doctor</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .success-message {
+      margin-top: 20px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Send Message to Doctor</h2>
+
+    <form action="{{ url_for('send_lab_message') }}" method="POST">
+      <label for="doctor">Select Doctor:</label>
+      <select name="doctor_id" id="doctor" required>
+        {% for doc in doctors %}
+          <option value="{{ doc.custom_id }}">{{ doc.full_name }} - {{ doc.specialization }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="message">Message:</label>
+      <textarea name="message" id="message" placeholder="Type your message..." required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+
+    {% if status %}
+      <p class="success-message">{{ status }}</p>
+    {% endif %}
+    <br><br>
+    <h3>Doctor Replies:</h3>
+{% for reply in replies %}
+  <div class="reply-box">
+    <p><strong>Doctor ID:</strong> {{ reply.doctor_id }}</p>
+    <p><strong>Reply:</strong> {{ reply.reply_text }}</p>
+    <p><small>Time: {{ reply.timestamp }}</small></p>
+  </div>
+{% else %}
+  <p>No replies from doctors yet.</p>
+{% endfor %}
+
+   <br><br>
+<form method="POST" enctype="multipart/form-data">
+  <label for="doctor">Send Image to Doctor:</label>
+  <select name="doctor_id" required>
+    {% for doctor in doctors %}
+      <option value="{{ doctor.custom_id }}">{{ doctor.full_name }} - {{ doctor.specialization }}</option>
+    {% endfor %}
+  </select>
+
+  <input type="file" name="image" accept="image/*" required>
+  <button type="submit">Upload Image</button>
+</form>
+
+
+  </div>
+</body>
+</html>
